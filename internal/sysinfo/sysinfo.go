@@ -2,11 +2,12 @@ package sysinfo
 
 import (
 	"fmt"
-	"os/exec"
 	"runtime"
 	"strings"
 	"syscall"
 	"unsafe"
+
+	"github.com/mumur/driver-booster/internal/cmdutil"
 )
 
 var (
@@ -117,7 +118,7 @@ func getComputerName() string {
 }
 
 func getCPUName() string {
-	out, err := exec.Command("powershell", "-NoProfile", "-Command",
+	out, err := cmdutil.HiddenCommand("powershell", "-NoProfile", "-Command",
 		"(Get-CimInstance Win32_Processor).Name").Output()
 	if err != nil {
 		return "Unknown CPU"
@@ -126,7 +127,7 @@ func getCPUName() string {
 }
 
 func getWindowsProductName() string {
-	out, err := exec.Command("powershell", "-NoProfile", "-Command",
+	out, err := cmdutil.HiddenCommand("powershell", "-NoProfile", "-Command",
 		"(Get-CimInstance Win32_OperatingSystem).Caption").Output()
 	if err != nil {
 		return "Windows"

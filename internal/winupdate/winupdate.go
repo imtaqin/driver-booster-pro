@@ -2,8 +2,9 @@ package winupdate
 
 import (
 	"encoding/json"
-	"os/exec"
 	"time"
+
+	"github.com/mumur/driver-booster/internal/cmdutil"
 )
 
 type Update struct {
@@ -101,7 +102,7 @@ try {
     Pending = $pending
 } | ConvertTo-Json -Depth 3 -Compress
 `
-	out, err := exec.Command("powershell", "-NoProfile", "-Command", psScript).Output()
+	out, err := cmdutil.HiddenCommand("powershell", "-NoProfile", "-Command", psScript).Output()
 	if err != nil {
 		result.Error = "Failed to check updates: " + err.Error()
 		result.CheckTime = time.Since(start).Round(time.Millisecond).String()
@@ -193,7 +194,7 @@ if ($ToInstall.Count -gt 0) {
     Write-Output "No updates to install."
 }
 `
-	out, err := exec.Command("powershell", "-NoProfile", "-Command", psScript).Output()
+	out, err := cmdutil.HiddenCommand("powershell", "-NoProfile", "-Command", psScript).Output()
 	if err != nil {
 		return InstallResult{
 			Success: false,

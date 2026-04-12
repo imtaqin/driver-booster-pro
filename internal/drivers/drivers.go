@@ -2,9 +2,10 @@ package drivers
 
 import (
 	"encoding/json"
-	"os/exec"
 	"strings"
 	"time"
+
+	"github.com/mumur/driver-booster/internal/cmdutil"
 )
 
 type Driver struct {
@@ -63,7 +64,7 @@ func (s *Scanner) enumDriversPnP() []Driver {
 	psScript := `
 Get-CimInstance Win32_PnPSignedDriver | Where-Object { $_.DeviceName -ne $null } | Select-Object -First 100 DeviceName, DeviceClass, Manufacturer, DriverVersion, DriverDate, InfName, IsSigned, Status | ConvertTo-Json -Compress
 `
-	out, err := exec.Command("powershell", "-NoProfile", "-Command", psScript).Output()
+	out, err := cmdutil.HiddenCommand("powershell", "-NoProfile", "-Command", psScript).Output()
 	if err != nil {
 		return []Driver{}
 	}

@@ -8,342 +8,257 @@
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
-    <!-- Animated background -->
-    <div class="bg-grid"></div>
-    <div class="bg-glow bg-glow-1"></div>
-    <div class="bg-glow bg-glow-2"></div>
-
     <div class="app">
-        <!-- Sidebar -->
-        <nav class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <div class="logo-icon">
-                        <i data-lucide="shield-check"></i>
-                    </div>
-                    <div class="logo-text-wrap">
-                        <span class="logo-text">Driver Booster</span>
-                        <span class="logo-sub">System Toolkit</span>
-                    </div>
+        <!-- Title Bar -->
+        <div class="titlebar">
+            <div class="titlebar-left">
+                <div class="app-logo">
+                    <i data-lucide="shield-check"></i>
+                </div>
+                <div class="app-title">
+                    <span class="app-name">DRIVER BOOSTER</span>
+                    <span class="app-edition">PRO</span>
                 </div>
             </div>
+            <div class="titlebar-right">
+                <div class="sys-status" id="sys-status">
+                    <div class="status-led"></div>
+                    <span>System Protected</span>
+                </div>
+            </div>
+        </div>
 
-            <div class="nav-section-label">Main</div>
-            <ul class="nav-items">
-                <li class="nav-item active" data-page="dashboard">
-                    <i data-lucide="layout-dashboard"></i>
-                    <span>Dashboard</span>
-                    <div class="nav-indicator"></div>
-                </li>
-                <li class="nav-item" data-page="drivers">
-                    <i data-lucide="cpu"></i>
-                    <span>Drivers</span>
-                    <div class="nav-indicator"></div>
-                </li>
-                <li class="nav-item" data-page="updates">
-                    <i data-lucide="download-cloud"></i>
-                    <span>Windows Update</span>
-                    <div class="nav-indicator"></div>
-                </li>
-                <li class="nav-item" data-page="system">
-                    <i data-lucide="monitor"></i>
-                    <span>System Info</span>
-                    <div class="nav-indicator"></div>
-                </li>
-            </ul>
-
-            <div class="nav-section-label">Tools</div>
-            <ul class="nav-items">
-                <li class="nav-item" data-page="dashboard" onclick="App.scanDrivers()">
+        <!-- Toolbar Tabs -->
+        <div class="toolbar">
+            <button class="toolbar-tab active" data-tab="scan">
+                <div class="tab-icon-wrap scan-icon-wrap">
                     <i data-lucide="scan-search"></i>
-                    <span>Quick Scan</span>
-                </li>
-            </ul>
-
-            <div class="sidebar-footer">
-                <div class="app-status" id="app-status">
-                    <div class="status-dot online"></div>
-                    <span>System Online</span>
                 </div>
-                <div class="version-badge">v1.0.0</div>
-            </div>
-        </nav>
-
-        <!-- Main Content -->
-        <main class="content">
-            <!-- Dashboard Page -->
-            <div class="page active" id="page-dashboard">
-                <div class="page-header">
-                    <div>
-                        <h1><i data-lucide="layout-dashboard" class="page-icon"></i> Dashboard</h1>
-                        <p class="subtitle">Monitor your system health at a glance</p>
-                    </div>
-                    <div class="header-actions">
-                        <button class="icon-btn" onclick="App.refreshSysInfo()" title="Refresh">
-                            <i data-lucide="refresh-cw"></i>
-                        </button>
-                    </div>
+                <span>Scan</span>
+            </button>
+            <button class="toolbar-tab" data-tab="drivers">
+                <div class="tab-icon-wrap drivers-icon-wrap">
+                    <i data-lucide="cpu"></i>
                 </div>
-
-                <div class="stats-grid">
-                    <div class="stat-card stat-drivers">
-                        <div class="stat-card-bg"></div>
-                        <div class="stat-icon">
-                            <i data-lucide="cpu"></i>
-                        </div>
-                        <div class="stat-info">
-                            <span class="stat-value" id="dash-driver-count">--</span>
-                            <span class="stat-label">Total Drivers</span>
-                        </div>
-                        <div class="stat-trend">
-                            <i data-lucide="layers"></i>
-                        </div>
-                    </div>
-                    <div class="stat-card stat-outdated">
-                        <div class="stat-card-bg"></div>
-                        <div class="stat-icon">
-                            <i data-lucide="alert-triangle"></i>
-                        </div>
-                        <div class="stat-info">
-                            <span class="stat-value" id="dash-outdated-count">--</span>
-                            <span class="stat-label">Outdated</span>
-                        </div>
-                        <div class="stat-trend">
-                            <i data-lucide="triangle-alert"></i>
-                        </div>
-                    </div>
-                    <div class="stat-card stat-updates">
-                        <div class="stat-card-bg"></div>
-                        <div class="stat-icon">
-                            <i data-lucide="download-cloud"></i>
-                        </div>
-                        <div class="stat-info">
-                            <span class="stat-value" id="dash-update-count">--</span>
-                            <span class="stat-label">Pending Updates</span>
-                        </div>
-                        <div class="stat-trend">
-                            <i data-lucide="cloud-download"></i>
-                        </div>
-                    </div>
-                    <div class="stat-card stat-ram">
-                        <div class="stat-card-bg"></div>
-                        <div class="stat-icon">
-                            <i data-lucide="memory-stick"></i>
-                        </div>
-                        <div class="stat-info">
-                            <span class="stat-value" id="dash-ram-percent">--</span>
-                            <span class="stat-label">RAM Usage</span>
-                        </div>
-                        <div class="stat-trend">
-                            <i data-lucide="activity"></i>
-                        </div>
-                    </div>
+                <span>Drivers</span>
+            </button>
+            <button class="toolbar-tab" data-tab="updates">
+                <div class="tab-icon-wrap updates-icon-wrap">
+                    <i data-lucide="download-cloud"></i>
                 </div>
+                <span>Download</span>
+            </button>
+            <button class="toolbar-tab" data-tab="system">
+                <div class="tab-icon-wrap settings-icon-wrap">
+                    <i data-lucide="monitor-cog"></i>
+                </div>
+                <span>System</span>
+            </button>
+        </div>
 
-                <div class="dashboard-panels">
-                    <div class="panel glass-panel">
-                        <div class="panel-header">
-                            <div class="panel-title">
-                                <i data-lucide="zap"></i>
-                                <h3>Quick Actions</h3>
+        <!-- Content Area -->
+        <div class="content-area">
+
+            <!-- ====== SCAN TAB ====== -->
+            <div class="tab-page active" id="tab-scan">
+                <div class="scan-hero">
+                    <div class="scan-illustration">
+                        <!-- Computer SVG Illustration -->
+                        <svg viewBox="0 0 200 180" class="computer-svg">
+                            <defs>
+                                <linearGradient id="screen-grad" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="#1e40af"/>
+                                    <stop offset="100%" stop-color="#3b82f6"/>
+                                </linearGradient>
+                                <linearGradient id="body-grad" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="#e2e8f0"/>
+                                    <stop offset="100%" stop-color="#cbd5e1"/>
+                                </linearGradient>
+                                <linearGradient id="shield-grad" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#10b981"/>
+                                    <stop offset="100%" stop-color="#059669"/>
+                                </linearGradient>
+                            </defs>
+                            <!-- Monitor -->
+                            <rect x="30" y="10" width="140" height="100" rx="8" fill="url(#body-grad)" stroke="#94a3b8" stroke-width="2"/>
+                            <rect x="38" y="18" width="124" height="76" rx="4" fill="url(#screen-grad)"/>
+                            <!-- Screen content lines -->
+                            <rect x="50" y="34" width="60" height="4" rx="2" fill="rgba(255,255,255,0.3)"/>
+                            <rect x="50" y="44" width="80" height="4" rx="2" fill="rgba(255,255,255,0.2)"/>
+                            <rect x="50" y="54" width="45" height="4" rx="2" fill="rgba(255,255,255,0.3)"/>
+                            <rect x="50" y="64" width="70" height="4" rx="2" fill="rgba(255,255,255,0.2)"/>
+                            <rect x="50" y="74" width="55" height="4" rx="2" fill="rgba(255,255,255,0.3)"/>
+                            <!-- Check marks -->
+                            <circle cx="46" cy="36" r="3" fill="#10b981"/>
+                            <circle cx="46" cy="46" r="3" fill="#10b981"/>
+                            <circle cx="46" cy="56" r="3" fill="#10b981"/>
+                            <circle cx="46" cy="66" r="3" fill="#f59e0b"/>
+                            <circle cx="46" cy="76" r="3" fill="#ef4444"/>
+                            <!-- Stand -->
+                            <rect x="85" y="110" width="30" height="12" rx="2" fill="#94a3b8"/>
+                            <rect x="70" y="120" width="60" height="6" rx="3" fill="#94a3b8"/>
+                            <!-- Shield overlay -->
+                            <path d="M145 55 L145 35 C145 35 155 30 165 35 C175 30 185 35 185 35 L185 55 C185 70 165 82 165 82 C165 82 145 70 145 55Z" fill="url(#shield-grad)" opacity="0.9"/>
+                            <polyline points="157,55 163,62 175,48" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="scan-info">
+                        <h2>Scan Your System</h2>
+                        <p>Detect outdated, missing, and faulty drivers. Keep your PC running at peak performance.</p>
+                        <div class="scan-stats" id="scan-stats">
+                            <div class="mini-stat">
+                                <i data-lucide="cpu"></i>
+                                <span id="scan-stat-total">--</span>
+                                <label>Drivers</label>
+                            </div>
+                            <div class="mini-stat warn">
+                                <i data-lucide="alert-triangle"></i>
+                                <span id="scan-stat-outdated">--</span>
+                                <label>Outdated</label>
+                            </div>
+                            <div class="mini-stat danger">
+                                <i data-lucide="x-circle"></i>
+                                <span id="scan-stat-errors">--</span>
+                                <label>Errors</label>
                             </div>
                         </div>
-                        <div class="quick-actions">
-                            <button class="action-btn primary" onclick="App.scanDrivers()">
-                                <div class="action-btn-icon"><i data-lucide="scan-search"></i></div>
-                                <div class="action-btn-text">
-                                    <span class="action-btn-title">Scan Drivers</span>
-                                    <span class="action-btn-desc">Detect outdated & missing drivers</span>
-                                </div>
-                                <i data-lucide="chevron-right" class="action-arrow"></i>
-                            </button>
-                            <button class="action-btn blue" onclick="App.checkUpdates()">
-                                <div class="action-btn-icon"><i data-lucide="cloud-download"></i></div>
-                                <div class="action-btn-text">
-                                    <span class="action-btn-title">Check Updates</span>
-                                    <span class="action-btn-desc">Search for Windows updates</span>
-                                </div>
-                                <i data-lucide="chevron-right" class="action-arrow"></i>
-                            </button>
-                            <button class="action-btn green" onclick="App.refreshSysInfo()">
-                                <div class="action-btn-icon"><i data-lucide="monitor-check"></i></div>
-                                <div class="action-btn-text">
-                                    <span class="action-btn-title">System Health</span>
-                                    <span class="action-btn-desc">Refresh system information</span>
-                                </div>
-                                <i data-lucide="chevron-right" class="action-arrow"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="panel glass-panel">
-                        <div class="panel-header">
-                            <div class="panel-title">
-                                <i data-lucide="gauge"></i>
-                                <h3>System Resources</h3>
-                            </div>
-                        </div>
-                        <div class="resource-bars">
-                            <div class="resource-item">
-                                <div class="resource-header">
-                                    <div class="resource-label-group">
-                                        <i data-lucide="memory-stick" class="resource-icon"></i>
-                                        <span class="resource-name">Memory (RAM)</span>
-                                    </div>
-                                    <span class="resource-value" id="dash-ram-detail">-- / --</span>
-                                </div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill ram-fill" id="dash-ram-bar" style="width: 0%">
-                                        <div class="progress-shine"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="resource-item">
-                                <div class="resource-header">
-                                    <div class="resource-label-group">
-                                        <i data-lucide="hard-drive" class="resource-icon"></i>
-                                        <span class="resource-name">Storage (C:)</span>
-                                    </div>
-                                    <span class="resource-value" id="dash-disk-detail">-- / --</span>
-                                </div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill disk-fill" id="dash-disk-bar" style="width: 0%">
-                                        <div class="progress-shine"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Drivers Page -->
-            <div class="page" id="page-drivers">
-                <div class="page-header">
-                    <div>
-                        <h1><i data-lucide="cpu" class="page-icon"></i> Driver Manager</h1>
-                        <p class="subtitle">Scan and manage your system drivers</p>
-                    </div>
-                    <div class="header-actions">
-                        <button class="action-btn primary compact" onclick="App.scanDrivers()">
+                        <button class="big-scan-btn" id="btn-scan" onclick="App.scanDrivers()">
                             <i data-lucide="scan-search"></i>
-                            <span>Scan Now</span>
+                            <span>SCAN NOW</span>
                         </button>
                     </div>
                 </div>
-                <div class="driver-summary glass-panel" id="driver-summary" style="display:none">
-                    <div class="summary-item">
-                        <i data-lucide="layers" class="sum-icon"></i>
-                        <strong id="drv-total">0</strong> <span>Total</span>
+
+                <!-- Step Indicator -->
+                <div class="step-bar">
+                    <div class="step active" id="step-1">
+                        <div class="step-num">1</div>
+                        <span>Scan Devices</span>
                     </div>
-                    <div class="summary-item warning">
-                        <i data-lucide="alert-triangle" class="sum-icon"></i>
-                        <strong id="drv-outdated">0</strong> <span>Outdated</span>
+                    <div class="step-line"></div>
+                    <div class="step" id="step-2">
+                        <div class="step-num">2</div>
+                        <span>Review Drivers</span>
                     </div>
-                    <div class="summary-item error">
-                        <i data-lucide="alert-circle" class="sum-icon"></i>
-                        <strong id="drv-errors">0</strong> <span>Errors</span>
-                    </div>
-                    <div class="summary-item muted">
-                        <i data-lucide="timer" class="sum-icon"></i>
-                        <span id="drv-time">--</span>
-                    </div>
-                </div>
-                <div class="filter-bar" id="driver-filters" style="display:none">
-                    <button class="filter-btn active" data-filter="all"><i data-lucide="list"></i> All</button>
-                    <button class="filter-btn" data-filter="outdated"><i data-lucide="alert-triangle"></i> Outdated</button>
-                    <button class="filter-btn" data-filter="error"><i data-lucide="x-circle"></i> Errors</button>
-                    <button class="filter-btn" data-filter="signed"><i data-lucide="shield-check"></i> Signed</button>
-                </div>
-                <div id="driver-list" class="driver-list">
-                    <div class="empty-state">
-                        <div class="empty-icon"><i data-lucide="cpu"></i></div>
-                        <h3>No Scan Results</h3>
-                        <p>Click <strong>Scan Now</strong> to detect installed drivers</p>
+                    <div class="step-line"></div>
+                    <div class="step" id="step-3">
+                        <div class="step-num">3</div>
+                        <span>Install Updates</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Updates Page -->
-            <div class="page" id="page-updates">
-                <div class="page-header">
-                    <div>
-                        <h1><i data-lucide="download-cloud" class="page-icon"></i> Windows Update</h1>
-                        <p class="subtitle">Keep your system up to date</p>
+            <!-- ====== DRIVERS TAB ====== -->
+            <div class="tab-page" id="tab-drivers">
+                <div class="tab-header">
+                    <div class="tab-header-left">
+                        <h2><i data-lucide="cpu"></i> Installed Drivers</h2>
+                        <div class="result-count" id="driver-result-count" style="display:none">
+                            <span id="drv-total-2">0</span> found &bull;
+                            <span class="warn-text" id="drv-outdated-2">0</span> outdated &bull;
+                            scanned in <span id="drv-time-2">--</span>
+                        </div>
                     </div>
-                    <div class="header-actions">
-                        <button class="action-btn primary compact" onclick="App.checkUpdates()">
-                            <i data-lucide="refresh-cw"></i>
-                            <span>Check Now</span>
-                        </button>
+                    <button class="header-btn" onclick="App.scanDrivers()">
+                        <i data-lucide="refresh-cw"></i> Rescan
+                    </button>
+                </div>
+                <div class="filter-strip" id="driver-filter-strip" style="display:none">
+                    <button class="pill active" data-filter="all">All</button>
+                    <button class="pill" data-filter="outdated"><i data-lucide="alert-triangle"></i> Outdated</button>
+                    <button class="pill" data-filter="error"><i data-lucide="x-circle"></i> Errors</button>
+                    <button class="pill" data-filter="signed"><i data-lucide="shield-check"></i> Signed</button>
+                </div>
+                <div class="driver-scroll" id="driver-list">
+                    <div class="placeholder-msg">
+                        <i data-lucide="scan-search"></i>
+                        <p>Click <strong>Scan</strong> to detect your drivers</p>
                     </div>
                 </div>
-                <div id="update-list" class="update-list">
-                    <div class="empty-state">
-                        <div class="empty-icon"><i data-lucide="cloud-download"></i></div>
-                        <h3>No Updates Checked</h3>
-                        <p>Click <strong>Check Now</strong> to search for Windows updates</p>
+                <!-- Update All CTA -->
+                <div class="cta-bar" id="cta-update-all" style="display:none">
+                    <button class="cta-btn" onclick="App.scanDrivers()">
+                        <i data-lucide="download"></i>
+                        <span>Update All Drivers</span>
+                        <span class="cta-count" id="cta-count">0</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ====== UPDATES TAB ====== -->
+            <div class="tab-page" id="tab-updates">
+                <div class="tab-header">
+                    <div class="tab-header-left">
+                        <h2><i data-lucide="download-cloud"></i> Windows Update</h2>
+                    </div>
+                    <button class="header-btn" onclick="App.checkUpdates()">
+                        <i data-lucide="refresh-cw"></i> Check Now
+                    </button>
+                </div>
+                <div class="driver-scroll" id="update-list">
+                    <div class="placeholder-msg">
+                        <i data-lucide="cloud-download"></i>
+                        <p>Click <strong>Check Now</strong> to search for updates</p>
                     </div>
                 </div>
             </div>
 
-            <!-- System Info Page -->
-            <div class="page" id="page-system">
-                <div class="page-header">
-                    <div>
-                        <h1><i data-lucide="monitor" class="page-icon"></i> System Information</h1>
-                        <p class="subtitle">Detailed hardware and software overview</p>
+            <!-- ====== SYSTEM TAB ====== -->
+            <div class="tab-page" id="tab-system">
+                <div class="tab-header">
+                    <div class="tab-header-left">
+                        <h2><i data-lucide="monitor-cog"></i> System Information</h2>
                     </div>
-                    <div class="header-actions">
-                        <button class="action-btn primary compact" onclick="App.refreshSysInfo()">
-                            <i data-lucide="refresh-cw"></i>
-                            <span>Refresh</span>
-                        </button>
-                    </div>
+                    <button class="header-btn" onclick="App.refreshSysInfo()">
+                        <i data-lucide="refresh-cw"></i> Refresh
+                    </button>
                 </div>
-                <div class="sysinfo-grid" id="sysinfo-grid">
-                    <div class="info-card glass-panel">
-                        <div class="info-card-header">
-                            <i data-lucide="laptop"></i>
-                            <h4>Computer</h4>
-                        </div>
-                        <div class="info-row"><span class="info-key"><i data-lucide="tag"></i> Name</span><span class="info-val" id="sys-name">--</span></div>
-                        <div class="info-row"><span class="info-key"><i data-lucide="app-window"></i> OS</span><span class="info-val" id="sys-os">--</span></div>
-                        <div class="info-row"><span class="info-key"><i data-lucide="hash"></i> Version</span><span class="info-val" id="sys-version">--</span></div>
-                        <div class="info-row"><span class="info-key"><i data-lucide="wrench"></i> Build</span><span class="info-val" id="sys-build">--</span></div>
-                        <div class="info-row"><span class="info-key"><i data-lucide="boxes"></i> Architecture</span><span class="info-val" id="sys-arch">--</span></div>
+                <div class="sys-grid">
+                    <div class="sys-card">
+                        <div class="sys-card-head"><i data-lucide="laptop"></i> Computer</div>
+                        <div class="sys-row"><span>Name</span><span id="sys-name">--</span></div>
+                        <div class="sys-row"><span>OS</span><span id="sys-os">--</span></div>
+                        <div class="sys-row"><span>Version</span><span id="sys-version">--</span></div>
+                        <div class="sys-row"><span>Build</span><span id="sys-build">--</span></div>
+                        <div class="sys-row"><span>Arch</span><span id="sys-arch">--</span></div>
                     </div>
-                    <div class="info-card glass-panel">
-                        <div class="info-card-header">
-                            <i data-lucide="cpu"></i>
-                            <h4>Processor</h4>
-                        </div>
-                        <div class="info-row"><span class="info-key"><i data-lucide="microchip"></i> CPU</span><span class="info-val" id="sys-cpu">--</span></div>
-                        <div class="info-row"><span class="info-key"><i data-lucide="layers"></i> Cores</span><span class="info-val" id="sys-cores">--</span></div>
+                    <div class="sys-card">
+                        <div class="sys-card-head"><i data-lucide="cpu"></i> Processor</div>
+                        <div class="sys-row"><span>CPU</span><span id="sys-cpu">--</span></div>
+                        <div class="sys-row"><span>Cores</span><span id="sys-cores">--</span></div>
                     </div>
-                    <div class="info-card glass-panel">
-                        <div class="info-card-header">
-                            <i data-lucide="memory-stick"></i>
-                            <h4>Memory</h4>
+                    <div class="sys-card">
+                        <div class="sys-card-head"><i data-lucide="memory-stick"></i> Memory</div>
+                        <div class="sys-row"><span>Total</span><span id="sys-ram-total">--</span></div>
+                        <div class="sys-row"><span>Used</span><span id="sys-ram-used">--</span></div>
+                        <div class="sys-row"><span>Free</span><span id="sys-ram-free">--</span></div>
+                        <div class="sys-row"><span>Usage</span><span id="sys-ram-pct">--</span></div>
+                        <div class="sys-bar-wrap">
+                            <div class="sys-bar"><div class="sys-bar-fill ram-bar" id="sys-ram-bar" style="width:0%"></div></div>
                         </div>
-                        <div class="info-row"><span class="info-key"><i data-lucide="database"></i> Total</span><span class="info-val" id="sys-ram-total">--</span></div>
-                        <div class="info-row"><span class="info-key"><i data-lucide="flame"></i> Used</span><span class="info-val" id="sys-ram-used">--</span></div>
-                        <div class="info-row"><span class="info-key"><i data-lucide="leaf"></i> Free</span><span class="info-val" id="sys-ram-free">--</span></div>
-                        <div class="info-row"><span class="info-key"><i data-lucide="percent"></i> Usage</span><span class="info-val" id="sys-ram-pct">--</span></div>
                     </div>
-                    <div class="info-card glass-panel">
-                        <div class="info-card-header">
-                            <i data-lucide="hard-drive"></i>
-                            <h4>Storage (C:)</h4>
+                    <div class="sys-card">
+                        <div class="sys-card-head"><i data-lucide="hard-drive"></i> Storage (C:)</div>
+                        <div class="sys-row"><span>Total</span><span id="sys-disk-total">--</span></div>
+                        <div class="sys-row"><span>Used</span><span id="sys-disk-used">--</span></div>
+                        <div class="sys-row"><span>Free</span><span id="sys-disk-free">--</span></div>
+                        <div class="sys-row"><span>Usage</span><span id="sys-disk-pct">--</span></div>
+                        <div class="sys-bar-wrap">
+                            <div class="sys-bar"><div class="sys-bar-fill disk-bar" id="sys-disk-bar" style="width:0%"></div></div>
                         </div>
-                        <div class="info-row"><span class="info-key"><i data-lucide="database"></i> Total</span><span class="info-val" id="sys-disk-total">--</span></div>
-                        <div class="info-row"><span class="info-key"><i data-lucide="flame"></i> Used</span><span class="info-val" id="sys-disk-used">--</span></div>
-                        <div class="info-row"><span class="info-key"><i data-lucide="leaf"></i> Free</span><span class="info-val" id="sys-disk-free">--</span></div>
-                        <div class="info-row"><span class="info-key"><i data-lucide="percent"></i> Usage</span><span class="info-val" id="sys-disk-pct">--</span></div>
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
+
+        <!-- Footer -->
+        <div class="app-footer">
+            <span>Driver Booster Pro v1.0.0</span>
+            <span class="footer-right">
+                <button class="footer-btn" onclick="App.refreshSysInfo()"><i data-lucide="info"></i> About</button>
+                <button class="footer-btn"><i data-lucide="life-buoy"></i> Help</button>
+            </span>
+        </div>
     </div>
 
     <!-- Loading Overlay -->
@@ -354,7 +269,6 @@
                 <i data-lucide="shield-check" class="spinner-icon"></i>
             </div>
             <p class="loading-title" id="loading-text">Scanning...</p>
-            <p class="loading-sub">Please wait while we analyze your system</p>
             <div class="loading-dots"><span></span><span></span><span></span></div>
         </div>
     </div>
