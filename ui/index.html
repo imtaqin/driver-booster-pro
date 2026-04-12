@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Booster Pro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <rect width="32" height="32" rx="8" fill="url(#logo-grad)"/>
+                        <path d="M8 16L14 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs><linearGradient id="logo-grad" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+                    </svg>
+                    <span class="logo-text">Driver Booster</span>
+                </div>
+            </div>
+            <ul class="nav-items">
+                <li class="nav-item active" data-page="dashboard">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                    <span>Dashboard</span>
+                </li>
+                <li class="nav-item" data-page="drivers">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                    <span>Drivers</span>
+                </li>
+                <li class="nav-item" data-page="updates">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-6.219-8.56"/><polyline points="21 3 21 9 15 9"/></svg>
+                    <span>Windows Update</span>
+                </li>
+                <li class="nav-item" data-page="system">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    <span>System Info</span>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <div class="version-badge">v1.0.0</div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Dashboard Page -->
+            <div class="page active" id="page-dashboard">
+                <div class="page-header">
+                    <h1>Dashboard</h1>
+                    <p class="subtitle">System health overview</p>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon drivers-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="dash-driver-count">--</span>
+                            <span class="stat-label">Total Drivers</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon outdated-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="dash-outdated-count">--</span>
+                            <span class="stat-label">Outdated Drivers</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon updates-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-6.219-8.56"/><polyline points="21 3 21 9 15 9"/></svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="dash-update-count">--</span>
+                            <span class="stat-label">Pending Updates</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon ram-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="dash-ram-percent">--</span>
+                            <span class="stat-label">RAM Usage</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-panels">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3>Quick Actions</h3>
+                        </div>
+                        <div class="quick-actions">
+                            <button class="action-btn primary" onclick="App.scanDrivers()">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                                Scan Drivers
+                            </button>
+                            <button class="action-btn secondary" onclick="App.checkUpdates()">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-6.219-8.56"/><polyline points="21 3 21 9 15 9"/></svg>
+                                Check Updates
+                            </button>
+                            <button class="action-btn accent" onclick="App.refreshSysInfo()">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+                                Refresh System
+                            </button>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3>System Resources</h3>
+                        </div>
+                        <div class="resource-bars">
+                            <div class="resource-item">
+                                <div class="resource-label">
+                                    <span>RAM</span>
+                                    <span id="dash-ram-detail">-- / --</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill ram-fill" id="dash-ram-bar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="resource-item">
+                                <div class="resource-label">
+                                    <span>Disk (C:)</span>
+                                    <span id="dash-disk-detail">-- / --</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill disk-fill" id="dash-disk-bar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Drivers Page -->
+            <div class="page" id="page-drivers">
+                <div class="page-header">
+                    <h1>Driver Manager</h1>
+                    <div class="page-actions">
+                        <button class="action-btn primary" onclick="App.scanDrivers()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                            Scan Now
+                        </button>
+                    </div>
+                </div>
+                <div class="driver-summary" id="driver-summary" style="display:none">
+                    <div class="summary-item"><strong id="drv-total">0</strong> Total</div>
+                    <div class="summary-item warning"><strong id="drv-outdated">0</strong> Outdated</div>
+                    <div class="summary-item error"><strong id="drv-errors">0</strong> Errors</div>
+                    <div class="summary-item muted">Scanned in <span id="drv-time">--</span></div>
+                </div>
+                <div class="filter-bar" id="driver-filters" style="display:none">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="outdated">Outdated</button>
+                    <button class="filter-btn" data-filter="error">Errors</button>
+                    <button class="filter-btn" data-filter="signed">Signed</button>
+                </div>
+                <div id="driver-list" class="driver-list">
+                    <div class="empty-state">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                        <p>Click <strong>Scan Now</strong> to detect installed drivers</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Updates Page -->
+            <div class="page" id="page-updates">
+                <div class="page-header">
+                    <h1>Windows Update</h1>
+                    <div class="page-actions">
+                        <button class="action-btn primary" onclick="App.checkUpdates()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-6.219-8.56"/><polyline points="21 3 21 9 15 9"/></svg>
+                            Check Now
+                        </button>
+                    </div>
+                </div>
+                <div id="update-list" class="update-list">
+                    <div class="empty-state">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><path d="M21 12a9 9 0 11-6.219-8.56"/><polyline points="21 3 21 9 15 9"/></svg>
+                        <p>Click <strong>Check Now</strong> to search for Windows updates</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Info Page -->
+            <div class="page" id="page-system">
+                <div class="page-header">
+                    <h1>System Information</h1>
+                    <div class="page-actions">
+                        <button class="action-btn primary" onclick="App.refreshSysInfo()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+                <div class="sysinfo-grid" id="sysinfo-grid">
+                    <div class="info-card">
+                        <h4>Computer</h4>
+                        <div class="info-row"><span class="info-key">Name</span><span class="info-val" id="sys-name">--</span></div>
+                        <div class="info-row"><span class="info-key">OS</span><span class="info-val" id="sys-os">--</span></div>
+                        <div class="info-row"><span class="info-key">Version</span><span class="info-val" id="sys-version">--</span></div>
+                        <div class="info-row"><span class="info-key">Build</span><span class="info-val" id="sys-build">--</span></div>
+                        <div class="info-row"><span class="info-key">Architecture</span><span class="info-val" id="sys-arch">--</span></div>
+                    </div>
+                    <div class="info-card">
+                        <h4>Processor</h4>
+                        <div class="info-row"><span class="info-key">CPU</span><span class="info-val" id="sys-cpu">--</span></div>
+                        <div class="info-row"><span class="info-key">Cores</span><span class="info-val" id="sys-cores">--</span></div>
+                    </div>
+                    <div class="info-card">
+                        <h4>Memory</h4>
+                        <div class="info-row"><span class="info-key">Total</span><span class="info-val" id="sys-ram-total">--</span></div>
+                        <div class="info-row"><span class="info-key">Used</span><span class="info-val" id="sys-ram-used">--</span></div>
+                        <div class="info-row"><span class="info-key">Free</span><span class="info-val" id="sys-ram-free">--</span></div>
+                        <div class="info-row"><span class="info-key">Usage</span><span class="info-val" id="sys-ram-pct">--</span></div>
+                    </div>
+                    <div class="info-card">
+                        <h4>Storage (C:)</h4>
+                        <div class="info-row"><span class="info-key">Total</span><span class="info-val" id="sys-disk-total">--</span></div>
+                        <div class="info-row"><span class="info-key">Used</span><span class="info-val" id="sys-disk-used">--</span></div>
+                        <div class="info-row"><span class="info-key">Free</span><span class="info-val" id="sys-disk-free">--</span></div>
+                        <div class="info-row"><span class="info-key">Usage</span><span class="info-val" id="sys-disk-pct">--</span></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay" style="display:none">
+        <div class="spinner"></div>
+        <p id="loading-text">Scanning...</p>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
