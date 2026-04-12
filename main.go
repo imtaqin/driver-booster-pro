@@ -28,8 +28,10 @@ var (
 	procGetWindowLong = user32.NewProc("GetWindowLongW")
 	procSetWindowLong = user32.NewProc("SetWindowLongW")
 	procSetWindowPos  = user32.NewProc("SetWindowPos")
-	procPostMessage   = user32.NewProc("PostMessageW")
-	procShowWindow    = user32.NewProc("ShowWindow")
+	procPostMessage     = user32.NewProc("PostMessageW")
+	procShowWindow      = user32.NewProc("ShowWindow")
+	procReleaseCapture  = user32.NewProc("ReleaseCapture")
+	procSendMessage     = user32.NewProc("SendMessageW")
 )
 
 const (
@@ -48,6 +50,8 @@ const (
 	swpNoZOrder     = 0x0004
 
 	wmSysCommand = 0x0112
+	wmNcLButtonDown = 0x00A1
+	htCaption    = 2
 	scMinimize   = 0xF020
 	scMaximize   = 0xF030
 	scRestore    = 0xF120
@@ -125,6 +129,11 @@ func main() {
 	removeWindowFrame(hwnd)
 
 	// Bind window control functions for custom title bar buttons
+	// Drag: simulate title bar click to enable native window dragging
+	w.Bind("windowDrag", func() {
+		procReleaseCapture.Call()
+		procSendMessage.Call(hwnd, wmNcLButtonDown, htCaption, 0)
+	})
 	w.Bind("windowMinimize", func() {
 		procPostMessage.Call(hwnd, wmSysCommand, scMinimize, 0)
 	})
