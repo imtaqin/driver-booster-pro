@@ -1,3 +1,7 @@
+/* ============================================================
+   Driver Booster Pro - Application Logic
+   ============================================================ */
+
 const App = {
     state: {
         sysInfo: null,
@@ -9,33 +13,45 @@ const App = {
         this.setupNavigation();
         this.setupFilters();
         this.refreshSysInfo();
+        // Re-render Lucide icons after DOM mutations
+        this.refreshIcons();
     },
 
+    refreshIcons() {
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+    },
+
+    // ---- Navigation ----
     setupNavigation() {
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const page = item.dataset.page;
-                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.querySelectorAll('.nav-item[data-page]').forEach(function(item) {
+            item.addEventListener('click', function() {
+                var page = item.dataset.page;
+                document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
                 item.classList.add('active');
-                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-                document.getElementById('page-' + page).classList.add('active');
+                document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+                var target = document.getElementById('page-' + page);
+                if (target) target.classList.add('active');
             });
         });
     },
 
+    // ---- Filters ----
     setupFilters() {
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        var self = this;
+        document.querySelectorAll('.filter-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
                 btn.classList.add('active');
-                this.filterDrivers(btn.dataset.filter);
+                self.filterDrivers(btn.dataset.filter);
             });
         });
     },
 
     filterDrivers(filter) {
-        document.querySelectorAll('.driver-card').forEach(card => {
-            const show = filter === 'all' ||
+        document.querySelectorAll('.driver-card').forEach(function(card) {
+            var show = filter === 'all' ||
                 (filter === 'outdated' && card.classList.contains('outdated')) ||
                 (filter === 'error' && card.classList.contains('error')) ||
                 (filter === 'signed' && card.dataset.signed === 'true');
@@ -43,21 +59,23 @@ const App = {
         });
     },
 
+    // ---- Loading ----
     showLoading(text) {
         document.getElementById('loading-text').textContent = text;
         document.getElementById('loading-overlay').style.display = 'flex';
+        this.refreshIcons();
     },
 
     hideLoading() {
         document.getElementById('loading-overlay').style.display = 'none';
     },
 
-    // System Info
+    // ---- System Info ----
     async refreshSysInfo() {
         this.showLoading('Collecting system information...');
         try {
-            const res = await fetch('/api/sysinfo');
-            const info = await res.json();
+            var res = await fetch('/api/sysinfo');
+            var info = await res.json();
             this.state.sysInfo = info;
             this.renderSysInfo(info);
             this.updateDashboardResources(info);
@@ -68,44 +86,51 @@ const App = {
     },
 
     renderSysInfo(info) {
-        document.getElementById('sys-name').textContent = info.computerName || '--';
-        document.getElementById('sys-os').textContent = info.osName || '--';
-        document.getElementById('sys-version').textContent = info.osVersion || '--';
-        document.getElementById('sys-build').textContent = info.osBuild || '--';
-        document.getElementById('sys-arch').textContent = info.architecture || '--';
-        document.getElementById('sys-cpu').textContent = info.cpuName || '--';
-        document.getElementById('sys-cores').textContent = info.cpuCores || '--';
-        document.getElementById('sys-ram-total').textContent = info.totalRam || '--';
-        document.getElementById('sys-ram-used').textContent = info.usedRam || '--';
-        document.getElementById('sys-ram-free').textContent = info.freeRam || '--';
-        document.getElementById('sys-ram-pct').textContent = (info.ramPercent || 0) + '%';
-        document.getElementById('sys-disk-total').textContent = info.diskTotal || '--';
-        document.getElementById('sys-disk-used').textContent = info.diskUsed || '--';
-        document.getElementById('sys-disk-free').textContent = info.diskFree || '--';
-        document.getElementById('sys-disk-pct').textContent = (info.diskPercent || 0) + '%';
+        this.setText('sys-name', info.computerName);
+        this.setText('sys-os', info.osName);
+        this.setText('sys-version', info.osVersion);
+        this.setText('sys-build', info.osBuild);
+        this.setText('sys-arch', info.architecture);
+        this.setText('sys-cpu', info.cpuName);
+        this.setText('sys-cores', info.cpuCores);
+        this.setText('sys-ram-total', info.totalRam);
+        this.setText('sys-ram-used', info.usedRam);
+        this.setText('sys-ram-free', info.freeRam);
+        this.setText('sys-ram-pct', (info.ramPercent || 0) + '%');
+        this.setText('sys-disk-total', info.diskTotal);
+        this.setText('sys-disk-used', info.diskUsed);
+        this.setText('sys-disk-free', info.diskFree);
+        this.setText('sys-disk-pct', (info.diskPercent || 0) + '%');
     },
 
     updateDashboardResources(info) {
-        document.getElementById('dash-ram-percent').textContent = (info.ramPercent || 0) + '%';
-        document.getElementById('dash-ram-detail').textContent = (info.usedRam || '--') + ' / ' + (info.totalRam || '--');
+        this.setText('dash-ram-percent', (info.ramPercent || 0) + '%');
+        this.setText('dash-ram-detail', (info.usedRam || '--') + ' / ' + (info.totalRam || '--'));
         document.getElementById('dash-ram-bar').style.width = (info.ramPercent || 0) + '%';
-        document.getElementById('dash-disk-detail').textContent = (info.diskUsed || '--') + ' / ' + (info.diskTotal || '--');
+        this.setText('dash-disk-detail', (info.diskUsed || '--') + ' / ' + (info.diskTotal || '--'));
         document.getElementById('dash-disk-bar').style.width = (info.diskPercent || 0) + '%';
 
+        // Warn color for high usage
+        var ramBar = document.getElementById('dash-ram-bar');
+        var diskBar = document.getElementById('dash-disk-bar');
         if (info.ramPercent > 80) {
-            document.getElementById('dash-ram-bar').style.background = 'linear-gradient(90deg, #f59e0b, #ef4444)';
+            ramBar.style.background = 'linear-gradient(90deg, #f59e0b, #ef4444)';
+        } else {
+            ramBar.style.background = '';
         }
         if (info.diskPercent > 85) {
-            document.getElementById('dash-disk-bar').style.background = 'linear-gradient(90deg, #f59e0b, #ef4444)';
+            diskBar.style.background = 'linear-gradient(90deg, #f59e0b, #ef4444)';
+        } else {
+            diskBar.style.background = '';
         }
     },
 
-    // Drivers
+    // ---- Drivers ----
     async scanDrivers() {
         this.showLoading('Scanning drivers... This may take a moment.');
         try {
-            const res = await fetch('/api/drivers/scan');
-            const result = await res.json();
+            var res = await fetch('/api/drivers/scan');
+            var result = await res.json();
             this.state.drivers = result;
             this.renderDrivers(result);
             this.updateDashboardDrivers(result);
@@ -118,77 +143,107 @@ const App = {
     renderDrivers(result) {
         document.getElementById('driver-summary').style.display = 'flex';
         document.getElementById('driver-filters').style.display = 'flex';
-        document.getElementById('drv-total').textContent = result.totalCount;
-        document.getElementById('drv-outdated').textContent = result.outdatedCount;
-        document.getElementById('drv-errors').textContent = result.errorCount;
-        document.getElementById('drv-time').textContent = result.scanTime;
+        this.setText('drv-total', result.totalCount);
+        this.setText('drv-outdated', result.outdatedCount);
+        this.setText('drv-errors', result.errorCount);
+        this.setText('drv-time', result.scanTime);
 
-        const list = document.getElementById('driver-list');
+        var list = document.getElementById('driver-list');
         if (!result.drivers || result.drivers.length === 0) {
-            list.innerHTML = '<div class="empty-state"><p>No drivers found.</p></div>';
+            list.innerHTML =
+                '<div class="empty-state">' +
+                    '<div class="empty-icon"><i data-lucide="search-x"></i></div>' +
+                    '<h3>No Drivers Found</h3>' +
+                    '<p>No driver information was returned.</p>' +
+                '</div>';
+            this.refreshIcons();
             return;
         }
 
-        list.innerHTML = result.drivers.map(d => {
-            const classes = ['driver-card'];
+        var self = this;
+        list.innerHTML = result.drivers.map(function(d) {
+            var classes = ['driver-card'];
             if (d.needsUpdate) classes.push('outdated');
             if (d.status === 'Error' || d.status === 'Degraded') classes.push('error');
 
-            const icon = this.getClassIcon(d.deviceClass);
-            const badges = [];
-            if (d.isSigned) badges.push('<span class="badge badge-signed">Signed</span>');
-            else badges.push('<span class="badge badge-unsigned">Unsigned</span>');
-            if (d.needsUpdate) badges.push('<span class="badge badge-outdated">Outdated</span>');
-            else badges.push('<span class="badge badge-ok">OK</span>');
+            var iconName = self.getClassIconName(d.deviceClass);
+
+            var badges = '';
+            if (d.isSigned) {
+                badges += '<span class="badge badge-signed"><i data-lucide="shield-check"></i> Signed</span>';
+            } else {
+                badges += '<span class="badge badge-unsigned"><i data-lucide="shield-x"></i> Unsigned</span>';
+            }
+            if (d.needsUpdate) {
+                badges += '<span class="badge badge-outdated"><i data-lucide="clock"></i> Outdated</span>';
+            } else {
+                badges += '<span class="badge badge-ok"><i data-lucide="circle-check"></i> OK</span>';
+            }
 
             return '<div class="' + classes.join(' ') + '" data-signed="' + d.isSigned + '">' +
-                '<div class="driver-class-icon">' + icon + '</div>' +
+                '<div class="driver-class-icon"><i data-lucide="' + iconName + '"></i></div>' +
                 '<div class="driver-info">' +
-                    '<div class="driver-name">' + this.esc(d.deviceName) + '</div>' +
-                    '<div class="driver-meta">' + this.esc(d.manufacturer || 'Unknown') + ' &bull; v' + this.esc(d.driverVersion || '?') + ' &bull; ' + this.esc(d.driverDate) + '</div>' +
+                    '<div class="driver-name">' + self.esc(d.deviceName) + '</div>' +
+                    '<div class="driver-meta">' +
+                        self.esc(d.manufacturer || 'Unknown') +
+                        ' <span class="driver-meta-sep">&middot;</span> v' + self.esc(d.driverVersion || '?') +
+                        ' <span class="driver-meta-sep">&middot;</span> ' + self.esc(d.driverDate) +
+                    '</div>' +
                 '</div>' +
-                '<div class="driver-badges">' + badges.join('') + '</div>' +
+                '<div class="driver-badges">' + badges + '</div>' +
             '</div>';
         }).join('');
+
+        this.refreshIcons();
     },
 
     updateDashboardDrivers(result) {
-        document.getElementById('dash-driver-count').textContent = result.totalCount;
-        document.getElementById('dash-outdated-count').textContent = result.outdatedCount;
+        this.setText('dash-driver-count', result.totalCount);
+        this.setText('dash-outdated-count', result.outdatedCount);
     },
 
-    getClassIcon(cls) {
-        const icons = {
-            'DISPLAY': '\uD83D\uDDA5',
-            'MEDIA': '\uD83D\uDD0A',
-            'NET': '\uD83C\uDF10',
-            'USB': '\uD83D\uDD0C',
-            'HIDCLASS': '\uD83D\uDDB1',
-            'KEYBOARD': '\u2328',
-            'DISKDRIVE': '\uD83D\uDCBE',
-            'PROCESSOR': '\u26A1',
-            'SYSTEM': '\u2699',
-            'BLUETOOTH': '\uD83D\uDCE1',
-            'CAMERA': '\uD83D\uDCF7',
-            'PRINTER': '\uD83D\uDDA8',
-        };
-        if (!cls) return '\uD83D\uDCE6';
+    getClassIconName(cls) {
+        if (!cls) return 'package';
         var upper = cls.toUpperCase();
-        for (var key in icons) {
-            if (upper.indexOf(key) !== -1) return icons[key];
+        var map = {
+            'DISPLAY': 'monitor',
+            'MEDIA': 'volume-2',
+            'AUDIO': 'volume-2',
+            'SOUND': 'volume-2',
+            'NET': 'wifi',
+            'NETWORK': 'wifi',
+            'USB': 'usb',
+            'HID': 'mouse',
+            'KEYBOARD': 'keyboard',
+            'DISK': 'hard-drive',
+            'STORAGE': 'hard-drive',
+            'PROCESSOR': 'cpu',
+            'SYSTEM': 'settings',
+            'BLUETOOTH': 'bluetooth',
+            'CAMERA': 'camera',
+            'IMAGE': 'camera',
+            'PRINT': 'printer',
+            'BATTERY': 'battery-charging',
+            'BIOMETRIC': 'fingerprint',
+            'FIRMWARE': 'circuit-board',
+            'SECURITY': 'shield',
+            'SENSOR': 'thermometer',
+        };
+        for (var key in map) {
+            if (upper.indexOf(key) !== -1) return map[key];
         }
-        return '\uD83D\uDCE6';
+        return 'package';
     },
 
-    // Updates
+    // ---- Updates ----
     async checkUpdates() {
         this.showLoading('Checking for Windows updates...');
         try {
-            const res = await fetch('/api/updates/check');
-            const result = await res.json();
+            var res = await fetch('/api/updates/check');
+            var result = await res.json();
             this.state.updates = result;
             this.renderUpdates(result);
-            document.getElementById('dash-update-count').textContent = result.pendingCount;
+            this.setText('dash-update-count', result.pendingCount);
         } catch (e) {
             console.error('Failed to check updates:', e);
         }
@@ -196,57 +251,79 @@ const App = {
     },
 
     renderUpdates(result) {
-        const list = document.getElementById('update-list');
+        var list = document.getElementById('update-list');
 
         if (result.error) {
-            list.innerHTML = '<div class="empty-state"><p style="color:var(--danger)">' + this.esc(result.error) + '</p></div>';
+            list.innerHTML =
+                '<div class="empty-state">' +
+                    '<div class="empty-icon"><i data-lucide="alert-circle"></i></div>' +
+                    '<h3>Error</h3>' +
+                    '<p style="color:var(--danger)">' + this.esc(result.error) + '</p>' +
+                '</div>';
+            this.refreshIcons();
             return;
         }
 
         if (!result.updates || result.updates.length === 0) {
-            list.innerHTML = '<div class="empty-state"><p>Your system is up to date!</p></div>';
+            list.innerHTML =
+                '<div class="empty-state">' +
+                    '<div class="empty-icon"><i data-lucide="circle-check"></i></div>' +
+                    '<h3>All Up to Date</h3>' +
+                    '<p>Your system is fully updated.</p>' +
+                '</div>';
+            this.refreshIcons();
             return;
         }
 
-        const pending = result.updates.filter(u => !u.isInstalled);
-        const installed = result.updates.filter(u => u.isInstalled);
-
-        let html = '';
+        var pending = result.updates.filter(function(u) { return !u.isInstalled; });
+        var installed = result.updates.filter(function(u) { return u.isInstalled; });
+        var self = this;
+        var html = '';
 
         if (pending.length > 0) {
-            html += '<h3 style="margin:8px 0;font-size:14px;color:var(--info)">Pending Updates (' + pending.length + ')</h3>';
-            html += pending.map(u =>
-                '<div class="update-card pending">' +
-                    '<div class="update-title">' + this.esc(u.title) + '</div>' +
+            html += '<div class="update-section-title pending"><i data-lucide="download"></i> Pending Updates (' + pending.length + ')</div>';
+            html += pending.map(function(u) {
+                return '<div class="update-card pending">' +
+                    '<div class="update-title">' + self.esc(u.title) + '</div>' +
                     '<div class="update-meta">' +
-                        (u.kbArticle ? '<span>' + this.esc(u.kbArticle) + '</span>' : '') +
-                        (u.category ? '<span>' + this.esc(u.category) + '</span>' : '') +
-                        (u.size ? '<span>' + this.esc(u.size) + '</span>' : '') +
-                        (u.severity && u.severity !== 'Unspecified' ? '<span>' + this.esc(u.severity) + '</span>' : '') +
-                        (u.isMandatory ? '<span style="color:var(--danger)">Mandatory</span>' : '') +
+                        (u.kbArticle ? '<span class="update-tag"><i data-lucide="file-text"></i> ' + self.esc(u.kbArticle) + '</span>' : '') +
+                        (u.category ? '<span class="update-tag"><i data-lucide="folder"></i> ' + self.esc(u.category) + '</span>' : '') +
+                        (u.size ? '<span class="update-tag"><i data-lucide="hard-drive"></i> ' + self.esc(u.size) + '</span>' : '') +
+                        (u.severity && u.severity !== 'Unspecified' ? '<span class="update-tag"><i data-lucide="alert-triangle"></i> ' + self.esc(u.severity) + '</span>' : '') +
+                        (u.isMandatory ? '<span class="update-tag" style="color:var(--danger)"><i data-lucide="alert-circle"></i> Mandatory</span>' : '') +
                     '</div>' +
-                '</div>'
-            ).join('');
+                '</div>';
+            }).join('');
         }
 
         if (installed.length > 0) {
-            html += '<h3 style="margin:16px 0 8px;font-size:14px;color:var(--success)">Recently Installed (' + installed.length + ')</h3>';
-            html += installed.map(u =>
-                '<div class="update-card installed">' +
-                    '<div class="update-title">' + this.esc(u.title) + '</div>' +
-                '</div>'
-            ).join('');
+            html += '<div class="update-section-title installed"><i data-lucide="check-circle"></i> Recently Installed (' + installed.length + ')</div>';
+            html += installed.map(function(u) {
+                return '<div class="update-card installed">' +
+                    '<div class="update-title">' + self.esc(u.title) + '</div>' +
+                '</div>';
+            }).join('');
         }
 
         list.innerHTML = html;
+        this.refreshIcons();
+    },
+
+    // ---- Utility ----
+    setText(id, value) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = (value != null && value !== '') ? value : '--';
     },
 
     esc(str) {
         if (!str) return '';
-        const div = document.createElement('div');
+        var div = document.createElement('div');
         div.textContent = str;
         return div.innerHTML;
     },
 };
 
-document.addEventListener('DOMContentLoaded', function() { App.init(); });
+// Boot
+document.addEventListener('DOMContentLoaded', function() {
+    App.init();
+});
