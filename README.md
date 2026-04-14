@@ -82,7 +82,7 @@ driver-booster/
 
 Detailed tutorial covering frameless windows, hiding PowerShell console flashes, and Win32 integration:
 
-https://imtaqin.id/post/building-windows-11-desktop-app-go-webview2
+https://imtaqin.id/building-windows-11-desktop-app-go-webview2
 
 ## License
 
